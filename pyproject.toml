@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "mtc-clone"
+version = "0.1.0"
+description = ""
+authors = ["bennettscience <brian.bennett2@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+Flask = "^1.1.2"
+Flask-SQLAlchemy = "^2.4.4"
+Flask-Migrate = "^2.5.3"
+canvasapi = "^2.1.0"
+flask-marshmallow = "^0.14.0"
+marshmallow-sqlalchemy = "^0.24.1"
+marshmallow = "^3.10.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+flake8 = "^3.8.4"
+black = "^20.8b1"
+mypy = "^0.790"
+Flask-DebugToolbar = "^0.11.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
