@@ -1,6 +1,8 @@
 import unittest
 from app import app, db
 from models.user import User
+from models.user_profile import UserProfile
+from models.user_settings import UserSettings
 
 
 class TestUserModel(unittest.TestCase):
@@ -9,7 +11,11 @@ class TestUserModel(unittest.TestCase):
         db.create_all()
 
         u = User(username="Default", email="default@email.com")
-        db.session.add(u)
+        p = UserProfile(
+            user=u, 
+            short_bio='This is the short bio.',
+            long_bio='This is the long bio.')
+        db.session.add_all([u, p])
         db.session.commit()
 
     def tearDown(self):
@@ -28,16 +34,21 @@ class TestUserModel(unittest.TestCase):
         user = User.query.filter_by(username="Default").first()
         user.set_password("password")
         self.assertTrue(user.check_password("password"))
-
-    # Set the user profile
-    def test_set_user_short_bio(self):
+    
+    def test_user_profile_instance(self):
         user = User.query.filter_by(username="Default").first()
-        input = "This is my short bio."
-        user.set_short_bio(input)
-        self.assertEqual(user.short_bio, "This is my short bio.")
+        profile = user.profile[0]
+        self.assertIsInstance(profile, UserProfile)
 
-    def test_set_user_long_bio(self):
+    def test_user_profile_contents(self):
         user = User.query.filter_by(username="Default").first()
-        input = "This is my long bio"
-        user.set_long_bio(input)
-        self.assertEqual(user.long_bio, "This is my long bio")
+        profile = user.profile[0]
+        self.assertEqual(profile.short_bio, 'This is the short bio.')
+        self.assertEqual(profile.long_bio, 'This is the long bio.')
+    
+    def test_set_short_bio(self):
+        user = User.query.filter_by(username='Default').first()
+        profile = user.profile[0]
+        new_bio = 'This is the new short bio'
+        profile.set_short_bio(new_bio)
+        self.assertEqual(profile.short_bio, new_bio)
