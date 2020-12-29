@@ -1,20 +1,29 @@
-import os
-import logging
-from logging.handlers import RotatingFileHandler
-from flask import Flask, session
-from flask_restful import Api
+from flask import Flask, jsonify
+from flask_restx import Api
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_debugtoolbar import DebugToolbarExtension
+from flask_marshmallow import Marshmallow
 from config import Config
+from marshmallow import ValidationError
 
-__version__ = '0.1'
+__version__ = "0.1"
 
 app = Flask(__name__)
 app.config.from_object(Config)
 api = Api(app)
 db = SQLAlchemy(app)
+ma = Marshmallow(app)
 migrate = Migrate(app, db)
 
-from app import users
-from models.user import User
+from app import app, db
+from resources.userapi import UserAPI, UserListAPI, user_ns
+
+api.add_namespace(user_ns)
+
+user_ns.add_resource(UserAPI, "/<int:id>")
+user_ns.add_resource(UserListAPI, "/")
+
+
+@api.errorhandler(ValidationError)
+def handle_validation_error(error):
+    return jsonify(error.messages), 400

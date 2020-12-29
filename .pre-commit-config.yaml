@@ -1,8 +1,4 @@
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.4.0
-    hooks:
-      - id: flake8
   - repo: https://github.com/psf/black
     rev: 19.3b0
     hooks:
@@ -12,6 +8,6 @@ repos:
       - id: unittest
         name: unittest
         language: system
-        entry: python -m unittest discover ./tests
+        entry: python -m unittest discover
         types: [python]
-        pass_filenames: true
+        pass_filenames: false
