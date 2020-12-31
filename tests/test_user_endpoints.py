@@ -1,4 +1,5 @@
 import unittest
+
 from app import app, db
 from models.user import User
 from models.user_profile import UserProfile
@@ -10,21 +11,11 @@ class TestUserEndpoints(unittest.TestCase):
         db.create_all()
         self.client = app.test_client()
 
-        u1 = User(
-            username="Default",
-            email="default@email.com",
-        )
-        p1 = UserProfile(
-            short_bio="This is the short bio.", public=False, user_id=1
-        )
+        u1 = User(username="Default", email="default@email.com")
+        p1 = UserProfile(short_bio="This is the short bio.", public=False, user_id=1)
 
-        u2 = User(
-            username="Default2",
-            email="default2@email.com",
-        )
-        p2 = UserProfile(
-            short_bio="This is the short bio.", public=True, user_id=2
-        )
+        u2 = User(username="Default2", email="default2@email.com")
+        p2 = UserProfile(short_bio="This is the short bio.", public=True, user_id=2)
         db.session.add_all([u1, u2, p1, p2])
         db.session.commit()
 

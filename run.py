@@ -13,5 +13,5 @@ def make_shell_context():
         "Artifact": Artifact,
         "User": User,
         "UserProfile": UserProfile,
-        "UserSettings": UserSettings
+        "UserSettings": UserSettings,
     }
