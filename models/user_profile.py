@@ -6,7 +6,7 @@ class UserProfile(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     short_bio = db.Column(db.String(100))
     long_bio = db.Column(db.String)
-    public = db.Column(db.Boolean)
+    public = db.Column(db.String)
 
     # def __repr__(self: None) -> str:
     #     # TODO: Connect the profile to the username
@@ -28,3 +28,7 @@ class UserProfile(db.Model):
     def set_long_bio(self: None, input: str) -> None:
         # TODO: Validate and sanitize input
         self.long_bio = input
+
+    def update(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)
