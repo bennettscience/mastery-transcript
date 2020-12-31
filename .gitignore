@@ -5,6 +5,7 @@ __pycache__/
 app/__pycache__/
 models/__pycache__/
 tests/__pycache__/
+app/requester.py
 
 app.db
 .flaskenv
