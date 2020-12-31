@@ -7,3 +7,4 @@ models/__pycache__/
 tests/__pycache__/
 
 app.db
+.flaskenv

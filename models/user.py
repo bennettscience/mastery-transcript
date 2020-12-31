@@ -1,6 +1,7 @@
 from app import db
 from models.user_settings import UserSettings
 from models.user_profile import UserProfile
+from models.artifact import Artifact
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -9,8 +10,9 @@ class User(db.Model):
     email = db.Column(db.String(128), index=True, unique=True)
     username = db.Column(db.String(64), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    settings = db.relationship(UserSettings, backref='user')
-    profile = db.relationship(UserProfile, backref='user')
+    settings = db.relationship(UserSettings, backref="user")
+    profile = db.relationship(UserProfile, backref="user")
+    artifacts = db.relationship(Artifact, backref="owner")
 
     # tags relationship
     # outcomes relationship
@@ -25,3 +27,6 @@ class User(db.Model):
 
     def get_id(self: None) -> int:
         return self.id
+
+    def get_profile(self: None) -> UserProfile:
+        return self.profile[0]

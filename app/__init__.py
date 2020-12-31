@@ -16,12 +16,13 @@ ma = Marshmallow(app)
 migrate = Migrate(app, db)
 
 from app import app, db
-from resources.userapi import UserAPI, UserListAPI, user_ns
+from resources.userapi import UserAPI, UserListAPI, UserProfileAPI, user_ns
 
 api.add_namespace(user_ns)
 
 user_ns.add_resource(UserAPI, "/<int:id>")
 user_ns.add_resource(UserListAPI, "/")
+user_ns.add_resource(UserProfileAPI, "/<int:id>/profile")
 
 
 @api.errorhandler(ValidationError)
