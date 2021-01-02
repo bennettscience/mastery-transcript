@@ -1,7 +1,9 @@
 import unittest
+
 from app import app, db
 from models.user import User
 from models.user_profile import UserProfile
+from models.user_settings import UserSettings
 
 
 class TestUserModel(unittest.TestCase):
@@ -13,7 +15,10 @@ class TestUserModel(unittest.TestCase):
         p = UserProfile(
             user=u, short_bio="This is the short bio.", long_bio="This is the long bio."
         )
-        db.session.add_all([u, p])
+        s = UserSettings(
+            user=u, canvas_id=12345, token="abcd", expire="999", refresh_token="zyxw"
+        )
+        db.session.add_all([u, p, s])
         db.session.commit()
 
     def tearDown(self):
@@ -50,3 +55,11 @@ class TestUserModel(unittest.TestCase):
         new_bio = "This is the new short bio"
         profile.set_short_bio(new_bio)
         self.assertEqual(profile.short_bio, new_bio)
+
+    def test_user_settings(self):
+        user = User.query.filter_by(username="Default").first()
+        settings = user.settings[0]
+        self.assertIsNotNone(user.settings)
+        self.assertIsInstance(settings, UserSettings)
+        self.assertEqual(settings.user_id, 1)
+        self.assertEqual(settings.canvas_id, 12345)

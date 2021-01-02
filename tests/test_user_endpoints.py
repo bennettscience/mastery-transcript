@@ -2,8 +2,10 @@ import json
 import unittest
 
 from app import app, db
+from app.utils import is_json
 from models.user import User
 from models.user_profile import UserProfile
+from models.user_settings import UserSettings
 
 
 class TestUserEndpoints(unittest.TestCase):
@@ -17,7 +19,10 @@ class TestUserEndpoints(unittest.TestCase):
 
         u2 = User(username="Default2", email="default2@email.com")
         p2 = UserProfile(short_bio="This is the short bio.", public="true", user_id=2)
-        db.session.add_all([u1, u2, p1, p2])
+
+        s1 = UserSettings(user=u1, canvas_id=12345)
+        s2 = UserSettings(user=u2, canvas_id=98765)
+        db.session.add_all([u1, u2, p1, p2, s1, s2])
         db.session.commit()
 
     def tearDown(self):
@@ -45,13 +50,33 @@ class TestUserEndpoints(unittest.TestCase):
         self.assertIsInstance(profile, object)
         self.assertEqual(profile["public"], "true")
 
-    # There's some kind of package error here...these methods work in dev server
-    # def test_update_user(self):
+    def test_bad_user_update_data(self):
+        payload = "this should fail"
+        headers = {"Content-Type": "application/json"}
+        req = self.client.put("/users/1/profile", json=payload, headers=headers)
+        self.assertEqual(req.status_code, 400)
+
+    def test_update_user(self):
+        payload = '{"public": "false"}'
+        headers = {"Content-Type": "application/json"}
+        req = self.client.put("/users/1/profile", json=payload, headers=headers)
+        profile = req.json
+        self.assertEqual(req.status_code, 200)
+        self.assertEqual(profile, "Successfully updated")
+
+    def test_missing_user_settings(self):
+        req = self.client.get("/users/99/settings")
+        self.assertEqual(req.status_code, 404)
+
+    def test_user_settings(self):
+        req = self.client.get("/users/1/settings")
+        settings = req.json
+        self.assertEqual(req.status_code, 200)
+        self.assertIsInstance(settings, object)
+
+    # def test_update_user_settings(self):
+    #     headers = {"Content-Type": "application/json"}
     #     payload = {
-    #         "public": "true",
+    #         ""
     #     }
-    #     headers = {"Content-Type: application/json"}
-    #     req = self.client.put("/users/1/profile", data=payload, headers=headers)
-    #     profile = req.json
-    #     self.assertIsInstance(profile, object)
-    #     self.assertEqual(profile['public'], 'true')
+    #     req = self.client.get("/users/1/settings")

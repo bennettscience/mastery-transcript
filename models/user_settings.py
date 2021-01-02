@@ -8,3 +8,7 @@ class UserSettings(db.Model):
     token = db.Column(db.String)
     expire = db.Column(db.Integer)
     refresh_token = db.Column(db.String)
+
+    def update(self, **kwargs):
+        for k, v in kwargs.items():
+            setattr(self, k, v)

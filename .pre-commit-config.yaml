@@ -1,10 +1,10 @@
 # isort
 repos:
-- repo: https://github.com/pycqa/isort
-  rev: 5.6.4
-  hooks:
-    - id: isort
-      args: ["--profile", "black", "--filter-files"]
+# - repo: https://github.com/pycqa/isort
+#   rev: 5.6.4
+#   hooks:
+#     - id: isort
+#       args: ["--profile", "black", "--filter-files"]
 
 # black
 - repo: https://github.com/ambv/black
