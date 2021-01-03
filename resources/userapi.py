@@ -1,6 +1,4 @@
-import json
-
-from flask import abort, request
+from flask import request
 from flask_restx import Namespace, Resource
 from marshmallow import ValidationError
 from sqlalchemy import event
@@ -65,7 +63,6 @@ class UserProfileAPI(Resource):
     def put(self: None, id: int) -> UserProfile:
         try:
             json_data = request.get_json()
-
             user_profile = User.query.get(id).profile[0]
             if user_profile is None:
                 return "Not found", 404

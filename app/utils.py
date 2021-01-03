@@ -6,7 +6,11 @@ from marshmallow_sqlalchemy import ModelConversionError, ModelSchema
 from app import db
 
 
-def is_json(data):
+# TODO: This needs some major cleanup
+# TODO: reject other inputs (lists, tuples, sets)
+def is_json(data: str) -> bool:
+    if type(data) is not str:
+        data = json.dumps(data)
     try:
         json.loads(data)
     except ValueError:
@@ -46,7 +50,11 @@ def setup_schema(Base, session):
 
 
 def update_object(schema, model, data):
-    data = json.loads(data)
+    # Marshmallow expects a python object, NOT json. Load the input into
+    # an object before trying to load the schema.
+    if type(data) is str:
+        data = json.loads(data)
+
     try:
         model_session = schema().load(data, instance=model, partial=True)
         model_session.update(**data)

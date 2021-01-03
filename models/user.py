@@ -13,7 +13,7 @@ class User(db.Model):
     password_hash = db.Column(db.String(128))
     settings = db.relationship(UserSettings, backref="user")
     profile = db.relationship(UserProfile, backref="user")
-    # artifacts = db.relationship(Artifact, backref="owner")
+    artifacts = db.relationship(Artifact, backref="owner")
 
     # tags relationship
     # outcomes relationship

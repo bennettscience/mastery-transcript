@@ -1,8 +1,6 @@
-import json
 import unittest
 
 from app import app, db
-from app.utils import is_json
 from models.user import User
 from models.user_profile import UserProfile
 from models.user_settings import UserSettings
@@ -57,8 +55,16 @@ class TestUserEndpoints(unittest.TestCase):
         self.assertEqual(req.status_code, 400)
 
     def test_update_user(self):
-        payload = '{"public": "false"}'
+        payload = {"public": "true"}
         headers = {"Content-Type": "application/json"}
+        req = self.client.put("/users/1/profile", json=payload, headers=headers)
+        profile = req.json
+        self.assertEqual(req.status_code, 200)
+        self.assertEqual(profile, "Successfully updated")
+
+    def test_string_update_user(self):
+        payload = '{"public": "true"}'
+        headers = headers = {"Content-Type": "application/json"}
         req = self.client.put("/users/1/profile", json=payload, headers=headers)
         profile = req.json
         self.assertEqual(req.status_code, 200)

@@ -25,13 +25,18 @@ from resources.userapi import (
     UserSettingsAPI,
     user_ns,
 )
+from resources.artifactapi import ArtifactAPI, ArtifactListAPI, artifact_ns
 
 api.add_namespace(user_ns)
+api.add_namespace(artifact_ns)
 
 user_ns.add_resource(UserAPI, "/<int:id>")
-user_ns.add_resource(UserListAPI, "/")
+user_ns.add_resource(UserListAPI)
 user_ns.add_resource(UserProfileAPI, "/<int:id>/profile")
 user_ns.add_resource(UserSettingsAPI, "/<int:id>/settings")
+
+artifact_ns.add_resource(ArtifactListAPI, "/<int:user_id>")
+artifact_ns.add_resource(ArtifactAPI, "/<int:user_id>/item/<int:id>")
 
 
 @api.errorhandler(ValidationError)
