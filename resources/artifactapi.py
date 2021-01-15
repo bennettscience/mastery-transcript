@@ -35,3 +35,13 @@ class ArtifactAPI(Resource):
     def get(self, user_id, id):
         item = Artifact.query.filter_by(user_id=user_id, id=id).first()
         return item.Schema().dump(item), 200
+
+    def put(self, user_id, id):
+        json_data = request.get_json()
+        artifact = Artifact.query.filter_by(user_id=user_id, id=id).first()
+
+        if not is_json(json_data):
+            return {"message": "Bad request", "data": json_data}, 400
+
+        result = update_object(Artifact.Schema, artifact, json_data)
+        return result

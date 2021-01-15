@@ -60,7 +60,7 @@ class TestUserEndpoints(unittest.TestCase):
         req = self.client.put("/users/1/profile", json=payload, headers=headers)
         profile = req.json
         self.assertEqual(req.status_code, 200)
-        self.assertEqual(profile, "Successfully updated")
+        self.assertIsInstance(profile, object)
 
     def test_string_update_user(self):
         payload = '{"public": "true"}'
@@ -68,7 +68,7 @@ class TestUserEndpoints(unittest.TestCase):
         req = self.client.put("/users/1/profile", json=payload, headers=headers)
         profile = req.json
         self.assertEqual(req.status_code, 200)
-        self.assertEqual(profile, "Successfully updated")
+        self.assertIsInstance(profile, object)
 
     def test_missing_user_settings(self):
         req = self.client.get("/users/99/settings")

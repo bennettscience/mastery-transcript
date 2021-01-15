@@ -5,7 +5,7 @@ from models.user import User
 from models.artifact import Artifact
 
 
-class TestArtifactApi(unittest.TestCase):
+class TestArtifact(unittest.TestCase):
     def setUp(self):
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
         db.create_all()

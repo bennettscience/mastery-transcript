@@ -50,6 +50,13 @@ def setup_schema(Base, session):
 
 
 def update_object(schema, model, data):
+    """
+    A generic worker to update data within an instantiated class
+
+    :param: schema: Marshmallow schema to use in processing data
+    :param: model: Instantiated class to update
+    :param: data: JSON object
+    """
     # Marshmallow expects a python object, NOT json. Load the input into
     # an object before trying to load the schema.
     if type(data) is str:
@@ -59,6 +66,6 @@ def update_object(schema, model, data):
         model_session = schema().load(data, instance=model, partial=True)
         model_session.update(**data)
         db.session.commit()
-        return "Successfully updated", 200
+        return schema().dump(model)
     except ValidationError as err:
         return err.messages

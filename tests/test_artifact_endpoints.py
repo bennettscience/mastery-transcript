@@ -38,3 +38,13 @@ class TestArtifactEndpoints(unittest.TestCase):
         item = req.get_json()
         self.assertIsInstance(item, object)
         self.assertEqual(item["name"], "Item 1")
+
+    def test_update_item_description(self):
+        payload = '{"description": "This is a string of data."}'
+        headers = {"Content-Type": "application/json"}
+        req = self.client.put("/artifacts/1/item/1", data=payload, headers=headers)
+        data = req.json
+
+        self.assertIsInstance(data, object)
+        self.assertIsInstance(data["description"], str)
+        self.assertEqual(data["description"], "This is a string of data.")
